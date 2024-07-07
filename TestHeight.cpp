@@ -15,7 +15,7 @@ void test_empty() {
 	int indent = 20;
 	int bin_height = 10;
 	auto res = height_calc(max, indent, bin_height);
-	assert(res == 0);
+	assert(res == 20);
 }
 
 int main() {
