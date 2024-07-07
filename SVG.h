@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include <algorithm>
+#include "HeightCalculation.h"
 
 void svg_text(double left, double baseline, string text) {
     cout << "<text x='" << left << "' y='" << baseline << "'>" << text << "</text>" << '\n';
@@ -21,22 +23,23 @@ void svg_end() {
 }
 
 void show_histogram_svg(const vector<size_t>& bins) {
-    const size_t SCREEN_HEIGHT = 20;
     const auto IMAGE_WIDTH = 400;
-    const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
     const auto TEXT_BASELINE = 20;
     const auto TEXT_WIDTH = 50;
-    const auto BIN_HEIGHT = 30;
-    const auto BLOCK_WIDTH = 10;
+    const auto BIN_INDENT = 10;
+    const auto BIN_WIDTH = 30;
+    const auto BLOCK_HEIGHT = 10;
+    auto max = *max_element(bins.begin(), bins.end());
+    const auto IMAGE_HEIGHT = height_calc(max, BIN_INDENT, BLOCK_HEIGHT);
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
+    
     double top = 0;
-    auto max_count = *max_element(bins.begin(), bins.end());
     for (size_t bin : bins) {
-        const double bin_width = BLOCK_WIDTH * bin;
-        svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-        svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT);
-        top += BIN_HEIGHT;
+        const double bin_height = BLOCK_HEIGHT * bin;
+        svg_text(TEXT_LEFT + top, TEXT_BASELINE, to_string(bin));
+        svg_rect(BIN_INDENT + top, TEXT_BASELINE + BIN_INDENT, BIN_WIDTH, bin_height);
+        top += BIN_WIDTH;
     }
     svg_end();
 }
