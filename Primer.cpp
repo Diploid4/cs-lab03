@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include "histogram.h"
 using namespace std;
 
 vector<double> input_numbers(size_t count) {
@@ -15,10 +16,7 @@ vector<double> input_numbers(size_t count) {
     return result;
 }
 
-void find_minmax(vector<double> numbers, double& min, double& max) {
-    min = *min_element(numbers.begin(), numbers.end());
-    max = *max_element(numbers.begin(), numbers.end());
-}
+
 
 vector<size_t> make_histogram(vector<double> numbers, size_t bin_count) {
     vector<size_t> bins(bin_count);
@@ -84,6 +82,7 @@ void svg_end() {
 }
 
 void show_histogram_svg(const vector<size_t>& bins) {
+    const size_t SCREEN_HEIGHT = 20;
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
@@ -93,6 +92,7 @@ void show_histogram_svg(const vector<size_t>& bins) {
     const auto BLOCK_WIDTH = 10;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top = 0;
+    auto max_count = *max_element(bins.begin(), bins.end());
     for (size_t bin : bins) {
         const double bin_width = BLOCK_WIDTH * bin;
         svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
